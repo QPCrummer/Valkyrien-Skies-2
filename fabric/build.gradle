@@ -72,15 +72,15 @@ dependencies {
     //modImplementation("curse.maven:cc-tweaked-282001:${cc_tweaked_version}")
 
     // Create compat
-    modImplementation("com.simibubi.create:create-fabric-${minecraft_version}:${create_fabric_version}") {
+    modImplementation("maven.modrinth:create-fabric-dme-edition:0.5.1-d-build.11+mc1.20.1") {
         exclude group: 'com.github.AlphaMode', module: 'fakeconfigtoml'
     }
-    modImplementation("com.jozufozu.flywheel:flywheel-fabric-${minecraft_version}:${flywheel_version_fabric}")
-    modImplementation("com.tterrag.registrate_fabric:Registrate:${registrate_version}")
+    modImplementation("com.jozufozu.flywheel:flywheel-fabric-1.20.1:0.6.9-1")
+    modImplementation("com.tterrag.registrate_fabric:Registrate:1.3.62-MC1.20.1")
 
     //modImplementation("io.github.fabricators_of_create.Porting-Lib:Porting-Lib:$port_lib_version")
     for (String module in port_lib_modules.split(",")) {
-        modImplementation("io.github.fabricators_of_create.Porting-Lib:$module:$port_lib_version")
+        modImplementation("io.github.fabricators_of_create.Porting-Lib:Porting-Lib:2.1.1163+1.20.1")
     }
 
     modImplementation("curse.maven:forge-config-api-port-fabric-547434:$config_api_id")

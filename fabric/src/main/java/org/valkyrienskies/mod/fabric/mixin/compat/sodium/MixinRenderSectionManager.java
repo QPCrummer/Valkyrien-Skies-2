@@ -2,11 +2,11 @@ package org.valkyrienskies.mod.fabric.mixin.compat.sodium;
 
 import me.jellysquid.mods.sodium.client.gl.device.CommandList;
 import me.jellysquid.mods.sodium.client.gl.device.RenderDevice;
-import me.jellysquid.mods.sodium.client.render.chunk.ChunkCameraContext;
 import me.jellysquid.mods.sodium.client.render.chunk.ChunkRenderMatrices;
-import me.jellysquid.mods.sodium.client.render.chunk.RegionChunkRenderer;
+import me.jellysquid.mods.sodium.client.render.chunk.ChunkRenderer;
 import me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager;
-import me.jellysquid.mods.sodium.client.render.chunk.passes.BlockRenderPass;
+import me.jellysquid.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;
+import me.jellysquid.mods.sodium.client.render.viewport.CameraTransform;
 import org.joml.Matrix4f;
 import org.joml.Vector3dc;
 import org.spongepowered.asm.mixin.Final;
@@ -23,12 +23,11 @@ public class MixinRenderSectionManager {
 
     @Shadow
     @Final
-    private RegionChunkRenderer chunkRenderer;
+    private ChunkRenderer chunkRenderer;
 
     @Redirect(at = @At(value = "INVOKE", target = "Lme/jellysquid/mods/sodium/client/gl/device/CommandList;flush()V"),
         method = "renderLayer")
-    private void redirectRenderLayer(final CommandList list, final ChunkRenderMatrices matrices,
-        final BlockRenderPass pass, final double camX, final double camY, final double camZ) {
+    private void redirectRenderLayer(CommandList list, ChunkRenderMatrices matrices, TerrainRenderPass pass, double camX, double camY, double camZ) {
 
         RenderDevice.INSTANCE.makeActive();
 
@@ -41,7 +40,7 @@ public class MixinRenderSectionManager {
             final ChunkRenderMatrices newMatrices = new ChunkRenderMatrices(matrices.projection(), newModelView);
             ((RegionChunkRendererDuck) chunkRenderer).setCameraForCulling(camX, camY, camZ);
             chunkRenderer.render(newMatrices, list, renderList, pass,
-                new ChunkCameraContext(center.x(), center.y(), center.z()));
+                new CameraTransform(center.x(), center.y(), center.z()));
             list.close();
         });
     }
